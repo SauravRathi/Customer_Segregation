@@ -1,0 +1,1 @@
+This project implements a K-Means clustering algorithm from scratch to segment customers based on their demographic and behavioral features, such as Age, Annual Income, and Spending Score. The primary objective is to identify groups of customers that exhibit similar shopping behaviors, enabling targeted marketing and business strategies.
