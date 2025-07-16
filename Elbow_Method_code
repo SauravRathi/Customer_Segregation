@@ -1,0 +1,50 @@
+def find_wcss(X,clusters,centroids):
+  wcss = 0
+  for cluster_id,cluster in enumerate(clusters):
+    for point_id in cluster:
+      diff = X[point_id] - centroids[cluster_id]
+      distance = np.sqrt(np.sum(diff ** 2))
+      wcss += distance ** 2
+  return wcss
+
+def elbow_method(X, max_k=10, max_iters=100):
+    wcss = []
+
+    for k in range(1, max_k + 1):
+        model = KMeans(X, num_clusters=k, max_iters=max_iters)
+        clusters, centroids = model.train(X)
+        wcss.append(find_wcss(X,clusters,centroids))
+
+    # Plotting the elbow curve
+    plt.figure(figsize=(6, 4))
+    plt.plot(range(1, max_k + 1), wcss, 'bo-')
+    plt.xlabel('Number of Clusters (k)')
+    plt.ylabel('WCSS (Within-Cluster Sum of Squares)')
+    plt.title('Elbow Method for Optimal k')
+    plt.xticks(range(1, max_k + 1))
+    plt.grid(True)
+    plt.show()
+
+
+#Improved Code to counter random-initialization of centroids
+
+def elbow_method_improved(X, max_k=10, max_iters=100):
+    wcss = []
+
+    for k in range(1, max_k + 1):
+      sum = 0
+      for runs in range(21):
+        model = KMeans(X, num_clusters=k, max_iters=max_iters)
+        clusters, centroids = model.train(X)
+        sum += find_wcss(X,clusters,centroids)
+      wcss.append(sum/20)
+
+    # Plotting the elbow curve
+    plt.figure(figsize=(6, 4))
+    plt.plot(range(1, max_k + 1), wcss, 'bo-')
+    plt.xlabel('Number of Clusters (k)')
+    plt.ylabel('WCSS (Within-Cluster Sum of Squares)')
+    plt.title('Elbow Method for Optimal k')
+    plt.xticks(range(1, max_k + 1))
+    plt.grid(True)
+    plt.show()
